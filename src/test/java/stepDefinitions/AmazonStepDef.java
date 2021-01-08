@@ -28,10 +28,10 @@ import io.cucumber.java.en.When;
 
 public class AmazonStepDef {
 	 WebDriver driver;
-	public Properties prop;
+	 public Properties prop;
 	
 	@Before
-	public void abc()
+	public void Amazon()
 	{
 		prop=new Properties();
 		try 
@@ -64,11 +64,6 @@ public class AmazonStepDef {
 		else if(browser.equalsIgnoreCase("firefox")) 
 			 {
 			  System.setProperty("webdriver.gecko.driver",".\\Driver\\geckodriver.exe");  
-//			  FirefoxOptions options = new FirefoxOptions();
-//			  options.addArguments("start-maximized");
-//			  options.addArguments("disable-infobars");
-//			  options.addArguments("--disable-extensions");
-//			  options.addArguments("--disable-notifications");
 			  driver=new FirefoxDriver();		    	
 		     }
 
@@ -78,22 +73,22 @@ public class AmazonStepDef {
 	@When("I open (.*) page")
 	public void open_Application() 
 	{
-		driver.get(prop.getProperty("URL"));
+		driver.get(prop.getProperty("amazonURL"));
 	}
 
 	@When("I search {string} in search bar")
 	public void search(String product)
 	{
-		driver.findElement(By.id(prop.getProperty("searchButton"))).click();
-	    driver.findElement(By.id(prop.getProperty("searchButton"))).sendKeys(product);
-		driver.findElement(By.id(prop.getProperty("submit"))).submit();
+		driver.findElement(By.id(prop.getProperty("searchBar"))).click();
+	    driver.findElement(By.id(prop.getProperty("searchBar"))).sendKeys(product);
+		driver.findElement(By.id(prop.getProperty("searchButton"))).submit();
 	}
 	
 	@When("I sort price from high to low")
 	public void sort_Price()
 	{
-		Select s= new Select(driver.findElement(By.id(prop.getProperty("sortButtonVisible"))));
-		s.selectByIndex(2);
+		Select selectFromDropdown= new Select(driver.findElement(By.id(prop.getProperty("sortButtonVisible"))));
+		selectFromDropdown.selectByIndex(2);
 		driver.findElement(By.id(prop.getProperty("sortHighToLow"))).click();
 		driver.manage().timeouts().setScriptTimeout(20, TimeUnit.SECONDS); 
 	}
@@ -101,27 +96,27 @@ public class AmazonStepDef {
 	@When("I click on second highest product")
 	public void second_Product() 
 	{
-		JavascriptExecutor js = (JavascriptExecutor)driver;
-		js.executeScript("window.scrollBy(0,250)");
-		WebDriverWait x=new WebDriverWait(driver, 50);
-		x.until(
-				ExpectedConditions.elementToBeClickable(By.cssSelector(prop.getProperty("nikonLink")))
-				);
+		JavascriptExecutor executor = (JavascriptExecutor)driver;
+		executor.executeScript("window.scrollBy(0,250)");
+		WebDriverWait wait=new WebDriverWait(driver, 50);
+		wait.until(
+				    ExpectedConditions.elementToBeClickable(By.cssSelector(prop.getProperty("nikonLink")))
+				  );
 	    driver.findElement(By.cssSelector(prop.getProperty("nikonLink"))).click(); 
-   }
+    }
 	
 	@Then("I verify title contains {string}")
 	public void title(String expectedTitle) 
 	{
 		driver.manage().timeouts().setScriptTimeout(10, TimeUnit.SECONDS);
 	    String oldTab = driver.getWindowHandle();
-		ArrayList<String> newTab = new ArrayList<String>(driver.getWindowHandles());
-		newTab.remove(oldTab); 
-		driver.switchTo().window(newTab.get(1));
+		ArrayList<String> tabList = new ArrayList<String>(driver.getWindowHandles());
+		tabList.remove(oldTab); 
+		driver.switchTo().window(tabList.get(1));
 		
-		String Title= driver.findElement(By.id(prop.getProperty("title"))).getText();
-		assertTrue("Verified",Title.contains(expectedTitle));	   
-   }
+		String title= driver.findElement(By.id(prop.getProperty("title"))).getText();
+		assertTrue("Verified",title.contains(expectedTitle));	   
+    }
 	
     @Then("I close browser")
 	public void close_browser()

@@ -1,0 +1,8 @@
+Steps followed before creating assignment:
+1. Download the latest version of Eclipse.
+2. Install Cucumber plugins and maven from Eclipse marketplace
+3. Create a maven project. pom.xml is created with it. Add all neccessary jars. Run maven clean,build and install.
+4. Create packages features containing feature files(Given, When,Then) and step definitions containing step definitions(logic of each step) .
+5. Create a Runner.java file in which we specify which feature and step definition file should be we run. And also we can add report using plugin.
+6. Also we can create a page object file where all locators will be present.
+7. Upload the project on github.
